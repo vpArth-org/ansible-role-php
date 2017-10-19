@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  become: true
+  roles:
+    - role: php
+      php_remove_versions: [5.6, 7.0]
+      php_version: 7.2
+      php_packages_extra: 
+        - php-xdebug
+        - php-pgsql
+        - php-interbase

@@ -1,0 +1,35 @@
+---
+- name: ondrej repository
+  apt_repository:
+    repo: 'ppa:ondrej/php'
+- name: "Remove old php versions"
+  apt:
+    name: "php{{item}}"
+    state: absent
+  with_items: "{{php_remove_versions}}"
+  when: php_remove_versions is defined
+
+- name: "Install php{{php_version}}"
+  apt:
+    name: "php{{ php_version }}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 86400
+
+- name: Collect php_packages.
+  set_fact:
+    php_packages: "{{ php_packages | list + php_packages_extra | list }}"
+  when: php_packages_extra is defined
+
+- name: php_packages
+  debug:
+    msg: "{{php_packages}}"
+
+# - name: "Install packages"
+#   apt:
+#     name: "{{item}}"
+#     state: present
+#     update_cache: yes
+#     cache_valid_time: 86400
+#   with_items: "{{php_packages_list}}"
+ 
